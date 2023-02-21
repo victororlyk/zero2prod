@@ -2,3 +2,7 @@ application:
   host: 0.0.0.0
 database:
   require_ssl: true
+email_client:
+  base_url: "https://api.mailgun.net/v3/sandbox5c5e61ae78a849dc8aa83d750d9ba3b4.mailgun.org/messages"
+  sender_email: "viktor.orlyk@yahoo.com"
+  api_key: "d73cf446289ad30dd37b16003761a7a1-ca9eeb88-2024e546"
