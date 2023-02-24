@@ -28,18 +28,19 @@ impl EmailClient {
 
     pub async fn send_email(
         &self,
-        recipient: SubscriberEmail,
+        recipient: &SubscriberEmail,
         subject: &str,
         html_content: &str,
         text: &str,
     ) -> Result<(), reqwest::Error> {
-        let url = format!("{}/messages", self.base_url);
+        let url = format!("{}/mail/send", self.base_url);
 
         let request_body = SendEmailRequest {
             from: self.sender.as_ref(),
             to: recipient.as_ref(),
             subject,
             text,
+            html: html_content,
         };
 
         let _ = self
@@ -61,6 +62,7 @@ struct SendEmailRequest<'a> {
     to: &'a str,
     subject: &'a str,
     text: &'a str,
+    html: &'a str,
 }
 
 #[cfg(test)]
@@ -119,7 +121,7 @@ mod tests {
 
         Mock::given(header_exists("authorization"))
             .and(header("Content-Type", "application/json"))
-            .and(path("/messages"))
+            .and(path("/mail/send"))
             .and(method("POST"))
             .and(SendEmailBodyMatcher)
             .respond_with(ResponseTemplate::new(200))
@@ -128,7 +130,7 @@ mod tests {
             .await;
 
         let _ = email_client
-            .send_email(email(), &subject(), &content(), &content())
+            .send_email(&email(), &subject(), &content(), &content())
             .await;
     }
 
@@ -144,7 +146,7 @@ mod tests {
             .await;
 
         let outcome = email_client(mock_server.uri())
-            .send_email(email(), &subject(), &content, &content)
+            .send_email(&email(), &subject(), &content, &content)
             .await;
 
         assert_ok!(outcome);
@@ -162,7 +164,7 @@ mod tests {
             .await;
 
         let outcome = email_client(mock_server.uri())
-            .send_email(email(), &subject(), &content, &content)
+            .send_email(&email(), &subject(), &content, &content)
             .await;
 
         assert_err!(outcome);
@@ -183,7 +185,7 @@ mod tests {
             .await;
 
         let outcome = email_client
-            .send_email(email(), &subject(), &content, &content)
+            .send_email(&email(), &subject(), &content, &content)
             .await;
 
         assert_err!(outcome);
