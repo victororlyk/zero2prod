@@ -1,6 +1,9 @@
 use crate::configuration::DatabaseSettings;
 use crate::configuration::Settings;
 use crate::routes::confirm;
+use crate::routes::home;
+use crate::routes::login;
+use crate::routes::login_form;
 use crate::routes::publish_newsletter;
 use crate::{
     email_client::EmailClient,
@@ -27,7 +30,6 @@ impl Application {
 
     pub async fn build(configuration: Settings) -> Result<Self, std::io::Error> {
         let connection_pool = get_connection_pool(&configuration.database);
-
         let sender_email = configuration
             .email_client
             .sender()
@@ -76,6 +78,9 @@ pub fn run(
     let server = HttpServer::new(move || {
         App::new()
             .wrap(TracingLogger::default())
+            .route("/", web::get().to(home))
+            .route("/login", web::get().to(login_form))
+            .route("/login", web::post().to(login))
             .route("/health_check", web::get().to(health_check))
             .route("/subscriptions", web::post().to(subscribe))
             .route("/subscriptions/confirm", web::get().to(confirm))

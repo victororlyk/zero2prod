@@ -16,3 +16,15 @@ run migration against local db
 ```bash
 SKIP_DOCKER=true ./scripts/init_db.sh
 ```
+
+
+## tests
+
+run one test and see the logs
+```
+TEST_LOG=true cargo test  non_existing_user_is_rejected | bunyan
+```
+with greping some specific part
+```
+TEST_LOG=true cargo test  non_existing_user_is_rejected | bunyan
+```
