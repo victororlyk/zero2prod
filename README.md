@@ -28,3 +28,11 @@ with greping some specific part
 ```
 TEST_LOG=true cargo test  non_existing_user_is_rejected | bunyan
 ```
+
+
+### scripts
+to make script executable and then run it
+```bash
+chmod +x ./scripts/init_redis.sh
+./script/init_redis.sh
+```
