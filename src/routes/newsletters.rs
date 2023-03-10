@@ -1,6 +1,6 @@
 use actix_web::{ResponseError, HttpResponse, web, HttpRequest};
 use sqlx::PgPool;
- use actix_web::http::{header, StatusCode, header::{HeaderMap, HeaderValue} };
+ use actix_web::http::{header, StatusCode, header::{HeaderValue} };
 use crate::domain::SubscriberEmail;
 use crate::authentication::{validate_credentials, AuthError, basic_authentication};
 use crate::email_client::EmailClient;
